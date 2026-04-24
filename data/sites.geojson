@@ -1,0 +1,214 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.00708009,
+          46.02648114
+        ]
+      },
+      "properties": {
+        "site": "La Loutre Graphite Mine",
+        "location": "Lokimo Metals",
+        "minerals": "Graphite",
+        "funding": "$8.35 million (USD)",
+        "category": "Critical Minerals Mine",
+        "description": "Graphite mining project in Quebec for critical mineral production.",
+        "text": "<strong>Proponent:</strong> Lokimo Metals<br><strong>Minerals:</strong> Graphite<br><strong>Funding:</strong> $8.35 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -116.7798715,
+          63.57754489
+        ]
+      },
+      "properties": {
+        "site": "NICO Project",
+        "location": "Fortune Minerals",
+        "minerals": "Cobalt, gold, bismuth, copper",
+        "funding": "$6.4 million (USD)",
+        "category": "Critical Minerals Mine",
+        "description": "Mining project in Northwest Territories focusing on cobalt and precious metals extraction.",
+        "text": "<strong>Proponent:</strong> Fortune Minerals<br><strong>Minerals:</strong> Cobalt, gold, bismuth, copper<br><strong>Funding:</strong> $6.4 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -130.4136036,
+          63.17845462
+        ]
+      },
+      "properties": {
+        "site": "Mactung Mine Project",
+        "location": "Fireweed Metals",
+        "minerals": "Tungsten",
+        "funding": "$15.8 million (USD)",
+        "category": "Mining Infrastructure",
+        "description": "The Mactung project, located on the Yukon–Northwest Territories border and led by Fireweed Metals, is one of the world’s largest undeveloped deposits of tungsten, a critical mineral used in military weapons applications. The project is being advanced with joint public funding from the United States and Canada. The Pentagon has committed approximately $15.8 million (USD) through the Defense Production Act. The Canadian government is matching this support with approximately $12.9 million (CAD) in funding. Together, these investments are intended to support feasibility studies for the required mining access road and early-stage development of the project.",
+        "text": "<strong>Proponent:</strong> Fireweed Metals<br><strong>Minerals:</strong> Tungsten<br><strong>Funding:</strong> $15.8 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.0465116,
+          46.37028614
+        ]
+      },
+      "properties": {
+        "site": "Sission Mine",
+        "location": "Northcliff Resources",
+        "minerals": "Tungsten, molybdenum",
+        "funding": "$15 million (USD)",
+        "category": "Critical Minerals Mine",
+        "description": "Molybdenum and tungsten mining project in New Brunswick serving defense and industrial needs.",
+        "text": "<strong>Proponent:</strong> Northcliff Resources<br><strong>Minerals:</strong> Tungsten, molybdenum<br><strong>Funding:</strong> $15 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.52419717,
+          45.37260798
+        ]
+      },
+      "properties": {
+        "site": "Nano One Cathode Factory (Candiac location)",
+        "location": "Nano One Materials Corp.",
+        "minerals": "Manufacturing of lithium iron phosphate cathodes",
+        "funding": "$12.9 million (USD)",
+        "category": "Refining and Manufacturing",
+        "description": "Nano One Materials Corp. produces lithium iron phosphate (LFP) cathode active materials used in battery supply chains. The Pentagon awarded $12.9 million (USD) through the Defense Production Act to expand Nano One’s facilities in Québec and British Columbia. LFP cathode materials are a key component in lithium-ion batteries, with applications in both energy storage and military systems. The Government of Canada has also provided support for the project, contributing over $20 million (CAD) in funding and complementary investments.",
+        "text": "<strong>Proponent:</strong> Nano One Materials Corp.<br><strong>Minerals:</strong> Manufacturing of lithium iron phosphate cathodes<br><strong>Funding:</strong> $12.9 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.9135826,
+          49.25122975
+        ]
+      },
+      "properties": {
+        "site": "Nano One Cathode Factory (Vancouver Location)",
+        "location": "Nano One Materials Corp.",
+        "minerals": "Manufacturing of lithium iron phosphate cathodes",
+        "funding": "$12.9 million (USD)",
+        "category": "Refining and Manufacturing",
+        "description": "Nano One Materials Corp. produces lithium iron phosphate (LFP) cathode active materials used in battery supply chains. The Pentagon awarded $12.9 million (USD) through the Defense Production Act to expand Nano One’s facilities in Québec and British Columbia. LFP cathode materials are a key component in lithium-ion batteries, with applications in both energy storage and military systems. The Government of Canada has also provided support for the project, contributing over $20 million (CAD) in funding and complementary investments.",
+        "text": "<strong>Proponent:</strong> Nano One Materials Corp.<br><strong>Minerals:</strong> Manufacturing of lithium iron phosphate cathodes<br><strong>Funding:</strong> $12.9 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.62214571,
+          47.40651521
+        ]
+      },
+      "properties": {
+        "site": "Electra Cobalt Refinery",
+        "location": "Electra Battery Minerals",
+        "minerals": "Cobalt",
+        "funding": "$20 million (USD)",
+        "category": "Refining and Manufacturing",
+        "description": "Electra Battery Materials’ cobalt refinery is being developed to produce cobalt sulfate—a key precursor material used in lithium-ion batteries. The Pentagon awarded $20 million (USD) through the Defense Production Act to support construction of an industrial-scale hydrometallurgical plant and establish North American production capacity. The Government of Canada has also contributed funding, providing approximately $5 million (CAD) to support related development work at the same refinery site. Cobalt sulfate produced at the facility will be used in large-capacity batteries for both commercial use and military systems.",
+        "text": "<strong>Proponent:</strong> Electra Battery Minerals<br><strong>Minerals:</strong> Cobalt<br><strong>Funding:</strong> $20 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.1191065,
+          49.2849983
+        ]
+      },
+      "properties": {
+        "site": "Lithium Americas Headquarters",
+        "location": "Lithium Americas",
+        "minerals": "Lithium (Thacker Pass mine, Nevada)",
+        "funding": "5% equity stake",
+        "category": "Canadian-Domiciled Companies",
+        "description": "Canadian-headquartered company developing lithium mining operations supporting battery production and clean energy initiatives.",
+        "text": "<strong>Proponent:</strong> Lithium Americas<br><strong>Minerals:</strong> Lithium (Thacker Pass mine, Nevada)<br><strong>Funding:</strong> 5% equity stake"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.117244,
+          49.2833947
+        ]
+      },
+      "properties": {
+        "site": "Trilogy Metals Headquarters",
+        "location": "Trilogy Metals",
+        "minerals": "Copper, cobalt, zinc, lead (Ambler Road project, Alaska)",
+        "funding": "$35.6 million (USD)",
+        "category": "Canadian-Domiciled Companies",
+        "description": "Canadian mining company developing large-scale copper and critical mineral projects in Alaska.",
+        "text": "<strong>Proponent:</strong> Trilogy Metals<br><strong>Minerals:</strong> Copper, cobalt, zinc, lead (Ambler Road project, Alaska)<br><strong>Funding:</strong> $35.6 million (USD)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -64.33625996,
+          56.30564852
+        ]
+      },
+      "properties": {
+        "site": "Strange Lake Rare Earth Mining Project",
+        "location": "Torngat Metals",
+        "minerals": "Rare earth elements (neodymium, praseodymium, dysprosium, terbium)",
+        "funding": "Torngat will sell REEs to Vacuumschmelze (VAC). E-VAC Magnetics, a VAC subsidiary, has signed agreement with the Pentagon to build a magnet manufacturing facility in South Carolina.",
+        "category": "Mining Infrastructure",
+        "description": "Rare earth element mining project in Labrador supplying critical materials for magnet production and defense applications.",
+        "text": "<strong>Proponent:</strong> Torngat Metals<br><strong>Minerals:</strong> Rare earth elements (neodymium, praseodymium, dysprosium, terbium)<br><strong>Funding:</strong> Torngat will sell REEs to Vacuumschmelze (VAC). E-VAC Magnetics, a VAC subsidiary, has signed agreement with the Pentagon to build a magnet manufacturing facility in South Carolina."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.29649065,
+          52.74226113
+        ]
+      },
+      "properties": {
+        "site": "Ring of Fire",
+        "location": "Wyloo Metals",
+        "minerals": "Copper, nickle, chromium, platinum group elements",
+        "funding": "Not yet announced",
+        "category": "Critical Minerals Mine",
+        "description": "Large-scale mining complex in Ontario targeting copper, nickel, and platinum group elements for industrial and defense applications.",
+        "text": "<strong>Proponent:</strong> Wyloo Metals<br><strong>Minerals:</strong> Copper, nickle, chromium, platinum group elements<br><strong>Funding:</strong> Not yet announced"
+      }
+    }
+  ]
+}

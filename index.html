@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pentagon Investments in Canadian Mining - Interactive Map</title>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="map-sec" class="">
+        <div class="is-map">
+            <div id="map"></div>
+            <div id="sidebar">
+                <div class="mil-interactive-heading">US Pentagon Investment in Critical Minerals Projects</div>
+                <div id="legend"></div>
+                <div class="mil-interactive-text">Click on a project to learn more.</div>
+                <div id="info-wrapper">
+                    <div id="heading" class="mil-interactive-heading"></div>
+                    <div id="loc"></div>
+                    <div id="details">
+                        <div id="employees"></div>
+                        <div id="militaryprod"></div>
+                        <div id="civprod"></div>
+                        <div id="greenprod"></div>
+                        <div id="ownership"></div>
+                    </div>
+                    <div id="text" class="mil-interactive-text"></div>
+                </div>
+                <div id="return-button">
+                    <em>Return to full map</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
