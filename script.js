@@ -286,17 +286,17 @@ map.on('load', () => {
                 });
                 
                 // Show detailed info in sidebar
-                const infoPanel = document.getElementById('info-content');
-                if (infoPanel) {
-                    infoPanel.innerHTML = `
-                        <strong>${feature.properties.site}</strong><br>
-                        <strong>Location:</strong> ${feature.properties.location}<br>
-                        <strong>Minerals:</strong> ${feature.properties.minerals}<br>
-                        <strong>Funding:</strong> ${feature.properties.funding}<br>
-                        <strong>Category:</strong> ${feature.properties.category}<br><br>
-                        <p>${feature.properties.description}</p>
-                    `;
-                }
+                document.getElementById('return-button').style.display = 'block';
+                document.getElementById('info-wrapper').style.display = 'block';
+                document.getElementById('heading').textContent = feature.properties.site;
+                document.getElementById('loc').textContent = feature.properties.location;
+                document.getElementById('employees').innerHTML = `<strong>Minerals:</strong> ${feature.properties.minerals}`;
+                document.getElementById('militaryprod').innerHTML = `<strong>Funding:</strong> ${feature.properties.funding}`;
+                document.getElementById('civprod').innerHTML = `<strong>Description:</strong> ${feature.properties.description}`;
+                document.getElementById('civprod').style.display = 'block';
+                document.getElementById('greenprod').style.display = 'none';
+                document.getElementById('ownership').style.display = 'none';
+                document.getElementById('text').innerHTML = feature.properties.text || '';
                 
                 // Fly to the point
                 map.flyTo({
