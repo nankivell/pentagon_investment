@@ -199,12 +199,76 @@ map.on('load', () => {
                 }
             });
 
+            // Add active-point source and layer
+            map.addSource('active-point', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            map.addLayer({
+                id: 'active-point',
+                type: 'circle',
+                source: 'active-point',
+                paint: {
+                    'circle-radius': 8,
+                    'circle-color': '#FD676A',
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
+
+            // ============================================================================
+            // HOVER INTERACTIONS - Must be inside map.on('load')
+            // ============================================================================
+            
+            // Hover to show popup on unclustered points
+            map.on('mouseenter', 'unclustered-points', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                if (popup) {
+                    popup.remove();
+                }
+                const feature = e.features[0];
+                popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                    offset: [0, -15]
+                })
+                    .setLngLat(feature.geometry.coordinates)
+                    .setHTML(`<strong>${feature.properties.site}</strong><br>${feature.properties.location}`)
+                    .addTo(map);
+            });
+
+            // Remove popup on mouse leave
+            map.on('mouseleave', 'unclustered-points', () => {
+                map.getCanvas().style.cursor = '';
+                if (popup) {
+                    popup.remove();
+                    popup = null;
+                }
+            });
+
+            // Hover on clusters
+            map.on('mouseenter', 'clusters', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'clusters', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            // ============================================================================
+            // CLICK INTERACTIONS - Must be inside map.on('load')
+            // ============================================================================
+            
             // Cluster expansion on click
             map.on('click', 'clusters', (e) => {
                 const clusterId = e.features[0].properties.cluster_id;
                 map.getSource('all-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
                     if (err) return;
-                    map.easeTo({
+                    map.flyTo({
                         center: e.lngLat,
                         zoom: zoom
                     });
@@ -214,154 +278,40 @@ map.on('load', () => {
             // Show popup on unclustered point click
             map.on('click', 'unclustered-points', (e) => {
                 const feature = e.features[0];
-                const popup = new mapboxgl.Popup()
-                    .setLngLat(e.lngLat)
-                    .setHTML(`<div class='popup-content'><strong>${feature.properties.site}</strong><br>${feature.properties.text}</div>`)
-                    .addTo(map);
-            });
-
-            map.on('mouseleave', 'unclustered-points', () => {
-                map.getCanvas().style.cursor = '';
+                
+                // Update active point
+                map.getSource('active-point').setData({
+                    type: 'FeatureCollection',
+                    features: [feature]
+                });
+                
+                // Show detailed info in sidebar
+                const infoPanel = document.getElementById('info-content');
+                if (infoPanel) {
+                    infoPanel.innerHTML = `
+                        <strong>${feature.properties.site}</strong><br>
+                        <strong>Location:</strong> ${feature.properties.location}<br>
+                        <strong>Minerals:</strong> ${feature.properties.minerals}<br>
+                        <strong>Funding:</strong> ${feature.properties.funding}<br>
+                        <strong>Category:</strong> ${feature.properties.category}<br><br>
+                        <p>${feature.properties.description}</p>
+                    `;
+                }
+                
+                // Fly to the point
+                map.flyTo({
+                    center: feature.geometry.coordinates,
+                    zoom: 6
+                });
             });
         })
         .catch(error => {
             console.error('Error loading GeoJSON:', error);
         });
-    
-    map.addSource('active-point', {
-        type: 'geojson',
-        data: {
-            type: 'FeatureCollection',
-            features: []
-        }
-    });
-
-    map.addLayer({
-        id: 'active-point',
-        type: 'circle',
-        source: 'active-point',
-        paint: {
-            'circle-radius': 8,
-            'circle-color': '#FD676A',
-            'circle-stroke-width': 2,
-            'circle-stroke-color': '#ffffff'
-        }
-    });
 });
 
-// ============================================================================
-// POPUP AND HOVER INTERACTIONS
-// ============================================================================
+// Global popup variable for hover interactions
 let popup = null;
-
-// Hover to show popup on unclustered points
-map.on('mouseenter', 'unclustered-points', (e) => {
-    map.getCanvas().style.cursor = 'pointer';
-    if (popup) {
-        popup.remove();
-    }
-    const feature = e.features[0];
-    popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        offset: [0, -15]
-    })
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML(`<strong>${feature.properties.site}</strong><br>${feature.properties.location}`)
-        .addTo(map);
-});
-
-// Remove popup on mouse leave
-map.on('mouseleave', 'unclustered-points', () => {
-    map.getCanvas().style.cursor = '';
-    if (popup) {
-        popup.remove();
-        popup = null;
-    }
-});
-
-// Hover on clusters
-map.on('mouseenter', 'clusters', (e) => {
-    map.getCanvas().style.cursor = 'pointer';
-});
-
-map.on('mouseleave', 'clusters', () => {
-    map.getCanvas().style.cursor = '';
-});
-
-// ============================================================================
-// CLICK INTERACTIONS
-// ============================================================================
-map.on('click', (event) => {
-    // Check for cluster clicks
-    const clusterFeatures = map.queryRenderedFeatures(event.point, {
-        layers: ['clusters']
-    });
-    
-    if (clusterFeatures.length) {
-        const feature = clusterFeatures[0];
-        const clusterId = feature.properties.cluster_id;
-        
-        // Get the cluster's zoom level and expand it
-        map.getSource('all-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
-            if (err) return;
-            map.flyTo({
-                center: feature.geometry.coordinates,
-                zoom: zoom
-            });
-        });
-        return;
-    }
-
-    // Check for unclustered point clicks
-    const pointFeatures = map.queryRenderedFeatures(event.point, {
-        layers: ['unclustered-points']
-    });
-
-    if (pointFeatures.length) {
-        const feature = pointFeatures[0];
-
-        // Update active point styling
-        map.getSource('active-point').setData({
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                geometry: feature.geometry,
-                properties: {}
-            }]
-        });
-
-        // Zoom to the clicked point
-        map.flyTo({
-            center: feature.geometry.coordinates,
-            zoom: 6
-        });
-
-        // Display info in sidebar
-        document.getElementById('return-button').style.display = 'block';
-        document.getElementById('info-wrapper').style.display = 'block';
-        document.getElementById('heading').textContent = `${feature.properties.site}`;
-        document.getElementById('loc').textContent = `${feature.properties.location}`;
-        document.getElementById('employees').innerHTML = `<span style="color: black">Minerals Sought:</span> ${feature.properties.minerals}`;
-        document.getElementById('militaryprod').innerHTML = `<span style="color: black">Funding:</span> ${feature.properties.funding}`;
-        document.getElementById('civprod').innerHTML = `<span style="color: black">Description:</span> ${feature.properties.description || 'No description available'}`;
-        document.getElementById('civprod').style.display = 'block';
-        document.getElementById('greenprod').style.display = 'none';
-        document.getElementById('ownership').style.display = 'none';
-
-        const textContent = feature.properties.text ? feature.properties.text : '';
-        document.getElementById('text').innerHTML = textContent;
-    } else {
-        // Reset view when clicking off points
-        map.flyTo({
-            center: [-95, 56],
-            zoom: 4
-        });
-
-        document.getElementById('return-button').style.display = 'none';
-        document.getElementById('info-wrapper').style.display = 'none';
-    }
-});
 
 // ============================================================================
 // RETURN BUTTON
