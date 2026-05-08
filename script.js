@@ -41,8 +41,7 @@ try {
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-95, 56],  // Centered on Canada
-        zoom: 3,  // Zoomed out
-        attributionControl: false  // Disable default attribution
+        zoom: 3  // Zoomed out
     });
     console.log('Map initialized successfully');
     
@@ -91,30 +90,20 @@ createLegend();
 // ============================================================================
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-// Add custom copyright attribution
-class CopyrightAttribution {
-    onAdd(map) {
-        this.map = map;
-        this.container = document.createElement('div');
-        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-attrib';
-        this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        this.container.style.padding = '5px 8px';
-        this.container.style.fontFamily = 'Arial, sans-serif';
-        this.container.style.fontSize = '11px';
-        this.container.style.color = '#333';
-        this.container.style.borderRadius = '3px';
-        this.container.innerHTML = '© <strong>Nessie Nankivell</strong>';
-        return this.container;
-    }
-    onRemove() {
-        if (this.container.parentNode) {
-            this.container.parentNode.removeChild(this.container);
-        }
-        this.map = undefined;
-    }
-}
+// Customize attribution control to remove "Improve this map" link
+const attributionControl = map.attributionControl;
+attributionControl.setAttribution('© <strong>Nessie Nankivell</strong> | © Mapbox © OpenStreetMap');
 
-map.addControl(new CopyrightAttribution(), 'bottom-right');
+// Wait for style to load, then remove the improve link
+map.on('style.load', () => {
+    // Find and hide the improve this map link
+    const attributionLinks = document.querySelectorAll('.mapboxgl-ctrl-attrib a');
+    attributionLinks.forEach(link => {
+        if (link.textContent.includes('Improve')) {
+            link.style.display = 'none';
+        }
+    });
+});
 
 // Load and style active points
 map.on('load', () => {
