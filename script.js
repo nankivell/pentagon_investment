@@ -41,7 +41,8 @@ try {
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-95, 56],  // Centered on Canada
-        zoom: 3  // Zoomed out
+        zoom: 3,  // Zoomed out
+        attributionControl: false  // Disable default attribution since we have custom one
     });
     console.log('Map initialized successfully');
     
