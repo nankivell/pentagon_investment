@@ -25,6 +25,11 @@ body {
     font-size: 14px;
 }
 
+/* Hide default Mapbox attribution controls except custom ones */
+.mapboxgl-ctrl-bottom-right > .mapboxgl-ctrl-attrib:first-child {
+    display: none !important;
+}
+
 .mil-interactive-heading {
     font-weight: 600;
     line-height: 125%;
