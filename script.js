@@ -90,20 +90,36 @@ createLegend();
 // ============================================================================
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-// Customize attribution control
-const attributionControl = map.attributionControl;
-attributionControl.setAttribution('Map by Nessie Nankivell | © Mapbox © OpenStreetMap');
-
-// Wait for style to load, then remove the improve link
-map.on('style.load', () => {
-    // Find and hide the improve this map link
-    const attributionLinks = document.querySelectorAll('.mapboxgl-ctrl-attrib a');
-    attributionLinks.forEach(link => {
-        if (link.textContent.includes('Improve')) {
-            link.style.display = 'none';
+// Add custom attribution control
+class CustomAttribution {
+    onAdd(map) {
+        this.map = map;
+        this.container = document.createElement('div');
+        this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-attrib';
+        this.container.innerHTML = 'Map by Nessie Nankivell | © <a href="https://www.mapbox.com/">Mapbox</a> © <a href="https://www.openstreetmap.org/">OpenStreetMap</a>';
+        this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        this.container.style.padding = '5px 8px';
+        this.container.style.fontFamily = 'Arial, sans-serif';
+        this.container.style.fontSize = '11px';
+        this.container.style.color = '#333';
+        this.container.style.borderRadius = '3px';
+        // Style the links
+        const links = this.container.querySelectorAll('a');
+        links.forEach(link => {
+            link.style.color = '#0066cc';
+            link.style.textDecoration = 'none';
+        });
+        return this.container;
+    }
+    onRemove() {
+        if (this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
         }
-    });
-});
+        this.map = undefined;
+    }
+}
+
+map.addControl(new CustomAttribution(), 'bottom-right');
 
 // Load and style active points
 map.on('load', () => {
