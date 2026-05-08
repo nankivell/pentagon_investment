@@ -91,26 +91,35 @@ createLegend();
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
 // Add custom attribution
-class AttributionControl {
+const attributionControl = new mapboxgl.AttributionControl({
+    compact: false
+});
+map.addControl(attributionControl, 'bottom-right');
+
+// Add custom text attribution
+class TextAttribution {
     onAdd(map) {
         this.map = map;
         this.container = document.createElement('div');
         this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-attrib';
         this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        this.container.style.padding = '8px 12px';
+        this.container.style.padding = '5px 8px';
         this.container.style.fontFamily = 'Arial, sans-serif';
-        this.container.style.fontSize = '12px';
+        this.container.style.fontSize = '11px';
         this.container.style.color = '#333';
-        this.container.textContent = 'Map by Nessie Nankivell';
+        this.container.style.borderRadius = '3px';
+        this.container.innerHTML = '© <strong>Nessie Nankivell</strong>';
         return this.container;
     }
     onRemove() {
-        this.container.parentNode.removeChild(this.container);
+        if (this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+        }
         this.map = undefined;
     }
 }
 
-map.addControl(new AttributionControl(), 'bottom-right');
+map.addControl(new TextAttribution(), 'bottom-right');
 
 // Load and style active points
 map.on('load', () => {
