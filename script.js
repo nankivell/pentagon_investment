@@ -187,9 +187,9 @@ map.on('load', () => {
                     'circle-color': [
                         'match',
                         ['get', 'category'],
-                        'Critical Minerals Mine', '#9ca4fc',
-                        'Mining Infrastructure', '#ffa69e',
-                        'Refining and Manufacturing', '#a0ecd0',
+                        'Critical Minerals Mine', '#7AC3C1',
+                        'Mining Infrastructure', '#388DFF',
+                        'Refining and Manufacturing', '#8CFFA7',
                         'Canadian-Domiciled Companies', '#333333',
                         '#999999'
                     ],
