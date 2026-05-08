@@ -125,7 +125,9 @@ map.on('load', () => {
     console.log('Map load event fired');
     
     // Add custom attribution after map loads
-    map.addControl(new CustomAttribution(), 'bottom-right');
+    const attrControl = new CustomAttribution();
+    map.addControl(attrControl, 'bottom-right');
+    console.log('Attribution control added');
     
     // Fetch and load GeoJSON data
     fetch('data/sites.geojson')
@@ -189,7 +191,7 @@ map.on('load', () => {
                         3, 21
                     ],
                     'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ffffff'
+                    'circle-stroke-color': '#333333'
                 }
             });
 
@@ -228,7 +230,7 @@ map.on('load', () => {
                     ],
                     'circle-radius': 8,
                     'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ffffff'
+                    'circle-stroke-color': '#333333'
                 }
             });
 
@@ -249,7 +251,7 @@ map.on('load', () => {
                     'circle-radius': 8,
                     'circle-color': '#FD676A',
                     'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ffffff'
+                    'circle-stroke-color': '#333333'
                 },
                 layout: {
                     'visibility': 'none'
