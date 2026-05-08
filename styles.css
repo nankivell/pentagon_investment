@@ -25,9 +25,10 @@ body {
     font-size: 14px;
 }
 
-/* Hide default Mapbox attribution controls except custom ones */
-.mapboxgl-ctrl-bottom-right > .mapboxgl-ctrl-attrib:first-child {
-    display: none !important;
+/* Hide default Mapbox attribution but keep custom ones */
+.mapboxgl-ctrl-bottom-right {
+    display: flex;
+    flex-direction: column;
 }
 
 .mil-interactive-heading {
