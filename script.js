@@ -90,13 +90,11 @@ createLegend();
 // ============================================================================
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-// Add custom attribution
-const attributionControl = new mapboxgl.AttributionControl({
-    compact: false
-});
-map.addControl(attributionControl, 'bottom-right');
+// Remove default Mapbox attribution
+const attributionControl = map.attributionControl;
+attributionControl.setAttribution('');
 
-// Add custom text attribution
+// Add custom attribution
 class TextAttribution {
     onAdd(map) {
         this.map = map;
