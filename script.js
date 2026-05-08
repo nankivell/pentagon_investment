@@ -348,12 +348,6 @@ map.on('load', () => {
                     civprod.style.display = 'block';
                 }
                 if (text) text.innerHTML = feature.properties.text || '';
-                
-                // Fly to the point
-                map.flyTo({
-                    center: feature.geometry.coordinates,
-                    zoom: 6
-                });
             });
         })
         .catch(error => {
