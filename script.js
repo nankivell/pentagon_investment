@@ -90,9 +90,9 @@ createLegend();
 // ============================================================================
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-// Customize attribution control to remove "Improve this map" link
+// Customize attribution control
 const attributionControl = map.attributionControl;
-attributionControl.setAttribution('© <strong>Nessie Nankivell</strong> | © Mapbox © OpenStreetMap');
+attributionControl.setAttribution('Map by Nessie Nankivell | © Mapbox © OpenStreetMap');
 
 // Wait for style to load, then remove the improve link
 map.on('style.load', () => {
