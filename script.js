@@ -301,16 +301,25 @@ map.on('load', () => {
             
             // Cluster expansion on click
             map.on('click', 'clusters', (e) => {
+                if (!e.features || !e.features[0]) {
+                    console.log('No features in click event');
+                    return;
+                }
                 console.log('Cluster clicked:', e.features[0].properties.cluster_id);
                 const clusterId = e.features[0].properties.cluster_id;
-                map.getSource('all-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
+                const clusterSource = map.getSource('all-points');
+                if (!clusterSource) {
+                    console.error('all-points source not found');
+                    return;
+                }
+                clusterSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
                     if (err) {
                         console.error('Cluster expansion error:', err);
                         return;
                     }
                     console.log('Cluster expansion zoom:', zoom);
                     map.flyTo({
-                        center: e.features[0].geometry.coordinates,
+                        center: e.lngLat,
                         zoom: zoom
                     });
                 });
