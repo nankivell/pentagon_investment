@@ -305,8 +305,8 @@ map.on('load', () => {
                 map.getSource('all-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
                     if (err) return;
                     map.flyTo({
-                        center: e.lngLat,
-                        zoom: zoom
+                        center: e.features[0].geometry.coordinates,
+                        zoom: zoom + 1  // Zoom in one extra level to ensure good centering
                     });
                 });
             });
