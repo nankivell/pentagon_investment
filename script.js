@@ -41,7 +41,8 @@ try {
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-95, 56],  // Centered on Canada
-        zoom: 3  // Zoomed out
+        zoom: 3,  // Zoomed out
+        attributionControl: false  // Disable default attribution
     });
     console.log('Map initialized successfully');
     
@@ -90,12 +91,8 @@ createLegend();
 // ============================================================================
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-// Remove default Mapbox attribution
-const attributionControl = map.attributionControl;
-attributionControl.setAttribution('');
-
-// Add custom attribution
-class TextAttribution {
+// Add custom copyright attribution
+class CopyrightAttribution {
     onAdd(map) {
         this.map = map;
         this.container = document.createElement('div');
@@ -117,7 +114,7 @@ class TextAttribution {
     }
 }
 
-map.addControl(new TextAttribution(), 'bottom-right');
+map.addControl(new CopyrightAttribution(), 'bottom-right');
 
 // Load and style active points
 map.on('load', () => {
