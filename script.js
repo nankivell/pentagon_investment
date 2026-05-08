@@ -301,9 +301,14 @@ map.on('load', () => {
             
             // Cluster expansion on click
             map.on('click', 'clusters', (e) => {
+                console.log('Cluster clicked:', e.features[0].properties.cluster_id);
                 const clusterId = e.features[0].properties.cluster_id;
                 map.getSource('all-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
-                    if (err) return;
+                    if (err) {
+                        console.error('Cluster expansion error:', err);
+                        return;
+                    }
+                    console.log('Cluster expansion zoom:', zoom);
                     map.flyTo({
                         center: e.features[0].geometry.coordinates,
                         zoom: zoom
