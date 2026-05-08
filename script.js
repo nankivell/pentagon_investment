@@ -306,7 +306,7 @@ map.on('load', () => {
                     if (err) return;
                     map.flyTo({
                         center: e.features[0].geometry.coordinates,
-                        zoom: zoom + 1  // Zoom in one extra level to ensure good centering
+                        zoom: zoom
                     });
                 });
             });
