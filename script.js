@@ -11,19 +11,19 @@ const layers = [
     {
         id: 'critical-mines',
         name: 'Critical Minerals Mine',
-        color: '#9ca4fc',
+        color: '#7AC3C1',
         category: 'Critical Minerals Mine'
     },
     {
         id: 'mining-infrastructure',
         name: 'Mining Infrastructure',
-        color: '#ffa69e',
+        color: '#388DFF',
         category: 'Mining Infrastructure'
     },
     {
         id: 'refining-manufacturing',
         name: 'Refining and Manufacturing',
-        color: '#a0ecd0',
+        color: '#8CFFA7',
         category: 'Refining and Manufacturing'
     },
     {
@@ -41,7 +41,7 @@ try {
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-95, 56],  // Centered on Canada
-        zoom: 4  // Closer zoom
+        zoom: 3  // Zoomed out
     });
     console.log('Map initialized successfully');
     
