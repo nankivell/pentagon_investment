@@ -119,11 +119,12 @@ class CustomAttribution {
     }
 }
 
-map.addControl(new CustomAttribution(), 'bottom-right');
-
 // Load and style active points
 map.on('load', () => {
     console.log('Map load event fired');
+    
+    // Add custom attribution after map loads
+    map.addControl(new CustomAttribution(), 'bottom-right');
     
     // Fetch and load GeoJSON data
     fetch('data/sites.geojson')
