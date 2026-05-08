@@ -307,6 +307,7 @@ map.on('load', () => {
                 }
                 console.log('Cluster clicked:', e.features[0].properties.cluster_id);
                 const clusterId = e.features[0].properties.cluster_id;
+                const clusterCenter = e.lngLat;  // Store coordinates before async callback
                 const clusterSource = map.getSource('all-points');
                 if (!clusterSource) {
                     console.error('all-points source not found');
@@ -318,8 +319,9 @@ map.on('load', () => {
                         return;
                     }
                     console.log('Cluster expansion zoom:', zoom);
+                    console.log('Flying to:', clusterCenter);
                     map.flyTo({
-                        center: e.lngLat,
+                        center: clusterCenter,
                         zoom: zoom
                     });
                 });
