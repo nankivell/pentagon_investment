@@ -275,20 +275,20 @@ map.on('load', () => {
                 
                 if (zoomLevel >= 7) {
                     spokeRadius = 50;
-                    clusterDistance = 20000; // 20km at zoom 7+
+                    clusterDistance = 15000; // 15km at zoom 7+
                 }
                 if (zoomLevel >= 8) {
                     spokeRadius = 30;
-                    clusterDistance = 10000; // 10km at zoom 8+
+                    clusterDistance = 8000; // 8km at zoom 8+
                 }
                 if (zoomLevel >= 9) {
                     spokeRadius = 15;
-                    clusterDistance = 5000; // 5km at zoom 9+
+                    clusterDistance = 3000; // 3km at zoom 9+
                 }
                 if (zoomLevel >= 10) {
                     // Minimal clustering - points almost independent
                     spokeRadius = 5;
-                    clusterDistance = 1000; // 1km at zoom 10+
+                    clusterDistance = 500; // 500m at zoom 10+
                 }
                 
                 // Reset spoke features
@@ -344,7 +344,16 @@ map.on('load', () => {
                     // Generate spokes for multi-point clusters
                     if (pointCount > 1) {
                         cluster.points.forEach((item, spokeIndex) => {
-                            const angle = (spokeIndex / pointCount) * Math.PI * 2;
+                            // For 2-point clusters, adjust angles to form a V-shape (upper left and upper right)
+                            let angle;
+                            if (pointCount === 2) {
+                                // V-shape: upper left at 135°, upper right at 45°
+                                angle = spokeIndex === 0 ? (135 * Math.PI / 180) : (45 * Math.PI / 180);
+                            } else {
+                                // For other clusters, distribute evenly around the circle
+                                angle = (spokeIndex / pointCount) * Math.PI * 2;
+                            }
+                            
                             const spokeCoordPixels = {
                                 x: Math.cos(angle) * spokeRadius,
                                 y: Math.sin(angle) * spokeRadius
