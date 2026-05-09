@@ -181,18 +181,6 @@ map.on('load', () => {
                 }
             });
 
-            // Add spoke lines layer
-            map.addLayer({
-                id: 'spoke-lines',
-                type: 'line',
-                source: 'spoke-lines',
-                paint: {
-                    'line-color': '#333333',
-                    'line-width': 1,
-                    'line-opacity': 0.6
-                }
-            }, 'unclustered-points'); // Draw lines under points
-
             // Create cluster centers source
             map.addSource('cluster-centers', {
                 type: 'geojson',
@@ -202,10 +190,19 @@ map.on('load', () => {
                 }
             });
 
-            // Create a modified features source for display with spoke positioning
-            let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
-            
-            // Add all points layer with category colors FIRST (before cluster-centers)
+            // Add spoke lines layer BEFORE unclustered-points so lines draw underneath
+            map.addLayer({
+                id: 'spoke-lines',
+                type: 'line',
+                source: 'spoke-lines',
+                paint: {
+                    'line-color': '#333333',
+                    'line-width': 1,
+                    'line-opacity': 0.6
+                }
+            });
+
+            // Add all points layer with category colors
             map.addLayer({
                 id: 'unclustered-points',
                 type: 'circle',
@@ -226,7 +223,7 @@ map.on('load', () => {
                 }
             });
 
-            // Add cluster center points layer AFTER unclustered-points
+            // Add cluster center points layer - HIDDEN (opacity 0)
             map.addLayer({
                 id: 'cluster-centers',
                 type: 'circle',
@@ -234,10 +231,13 @@ map.on('load', () => {
                 paint: {
                     'circle-radius': 4,
                     'circle-color': '#333333',
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#333333'
+                    'circle-stroke-width': 0,
+                    'circle-opacity': 0  // Hide the center circles
                 }
             });
+            
+            // Create a modified features source for display with spoke positioning
+            let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
             
             // Helper function to calculate distance between two points (in meters)
             function getDistance(coords1, coords2) {
