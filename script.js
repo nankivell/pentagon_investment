@@ -163,61 +163,63 @@ map.on('load', () => {
             console.log('First feature category after mapping:', data.features[0].properties.category);
             allFeatures = data.features;
             
-            // Create a single combined source with all features
+            // Create a single combined source with all features (NO CLUSTERING)
             map.addSource('all-points', {
                 type: 'geojson',
                 data: {
                     type: 'FeatureCollection',
                     features: allFeatures
-                },
-                cluster: true,
-                clusterMaxZoom: 13,
-                clusterRadius: 50
+                }
             });
 
-            // Add cluster layer (circles for clusters)
+            // Create spoke lines source and layer
+            map.addSource('spoke-lines', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            // Add spoke lines layer
             map.addLayer({
-                id: 'clusters',
+                id: 'spoke-lines',
+                type: 'line',
+                source: 'spoke-lines',
+                paint: {
+                    'line-color': '#333333',
+                    'line-width': 1,
+                    'line-opacity': 0.6
+                }
+            }, 'unclustered-points'); // Draw lines under points
+
+            // Create cluster centers source
+            map.addSource('cluster-centers', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            // Add cluster center points layer
+            map.addLayer({
+                id: 'cluster-centers',
                 type: 'circle',
-                source: 'all-points',
-                filter: ['has', 'point_count'],
+                source: 'cluster-centers',
                 paint: {
-                    'circle-color': '#192f5eff',
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        15,
-                        2, 18,
-                        3, 21
-                    ],
+                    'circle-radius': 4,
+                    'circle-color': '#333333',
                     'circle-stroke-width': 1,
-                    'circle-stroke-color': '#192f5eff'
+                    'circle-stroke-color': '#333333'
                 }
             });
 
-            // Add cluster count layer
-            map.addLayer({
-                id: 'cluster-count',
-                type: 'symbol',
-                source: 'all-points',
-                filter: ['has', 'point_count'],
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                    'text-size': 12,
-                    'text-offset': [0, 0]
-                },
-                paint: {
-                    'text-color': '#ffffff'
-                }
-            });
-
-            // Add unclustered points layer with category colors
+            // Add all points layer with category colors (NO CLUSTERING FILTER)
             map.addLayer({
                 id: 'unclustered-points',
                 type: 'circle',
                 source: 'all-points',
-                filter: ['!', ['has', 'point_count']],
                 paint: {
                     'circle-color': [
                         'match',
@@ -233,6 +235,130 @@ map.on('load', () => {
                     'circle-stroke-color': '#333333'
                 }
             });
+
+            // ============================================================================
+            // HUB AND SPOKE CLUSTERING
+            // ============================================================================
+            function createHubAndSpokeClusters() {
+                const spokeRadius = 100; // pixels
+                const clusterDistance = 80; // meters - points within this distance are clustered
+                const zoomLevel = map.getZoom();
+                
+                // Create spatial index for clustering
+                const clustered = {};
+                const clusterCenters = [];
+                const spokeLineFeatures = [];
+                const clusterCenterFeatures = [];
+                
+                allFeatures.forEach((feature, index) => {
+                    const coords = feature.geometry.coordinates;
+                    let foundCluster = false;
+                    
+                    // Check if this point is near an existing cluster
+                    for (const clusterId in clustered) {
+                        const cluster = clustered[clusterId];
+                        const distance = getDistance(coords, cluster.center);
+                        if (distance < clusterDistance) {
+                            cluster.points.push(feature);
+                            foundCluster = true;
+                            break;
+                        }
+                    }
+                    
+                    // Create new cluster if no match found
+                    if (!foundCluster) {
+                        const clusterId = 'cluster_' + index;
+                        clustered[clusterId] = {
+                            center: coords,
+                            points: [feature]
+                        };
+                    }
+                });
+                
+                // Generate spoke positions
+                for (const clusterId in clustered) {
+                    const cluster = clustered[clusterId];
+                    const centerCoords = cluster.center;
+                    const pointCount = cluster.points.length;
+                    
+                    // Add cluster center point
+                    clusterCenterFeatures.push({
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: centerCoords
+                        }
+                    });
+                    
+                    cluster.points.forEach((feature, index) => {
+                        if (pointCount === 1) {
+                            // Single point - no spoke needed, update source directly
+                            return;
+                        }
+                        
+                        // Calculate angle for spoke position
+                        const angle = (index / pointCount) * Math.PI * 2;
+                        const spokeCoordPixels = {
+                            x: Math.cos(angle) * spokeRadius,
+                            y: Math.sin(angle) * spokeRadius
+                        };
+                        
+                        // Convert pixel offset to lat/lng offset
+                        const centerPixel = map.project(centerCoords);
+                        const spokeLngLat = map.unproject({
+                            x: centerPixel.x + spokeCoordPixels.x,
+                            y: centerPixel.y + spokeCoordPixels.y
+                        });
+                        
+                        // Update feature with spoke coordinates
+                        feature.properties.spoke_lng = spokeLngLat.lng;
+                        feature.properties.spoke_lat = spokeLngLat.lat;
+                        feature.properties.cluster_center_lng = centerCoords[0];
+                        feature.properties.cluster_center_lat = centerCoords[1];
+                        
+                        // Add spoke line
+                        spokeLineFeatures.push({
+                            type: 'Feature',
+                            geometry: {
+                                type: 'LineString',
+                                coordinates: [centerCoords, [spokeLngLat.lng, spokeLngLat.lat]]
+                            }
+                        });
+                    });
+                }
+                
+                // Update sources with spoke lines and cluster centers
+                map.getSource('spoke-lines').setData({
+                    type: 'FeatureCollection',
+                    features: spokeLineFeatures
+                });
+                
+                map.getSource('cluster-centers').setData({
+                    type: 'FeatureCollection',
+                    features: clusterCenterFeatures
+                });
+            }
+            
+            // Helper function to calculate distance between two points (in meters)
+            function getDistance(coords1, coords2) {
+                const R = 6371000; // Earth radius in meters
+                const lat1 = coords1[1] * Math.PI / 180;
+                const lat2 = coords2[1] * Math.PI / 180;
+                const deltaLat = (coords2[1] - coords1[1]) * Math.PI / 180;
+                const deltaLng = (coords2[0] - coords1[0]) * Math.PI / 180;
+                
+                const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                          Math.cos(lat1) * Math.cos(lat2) *
+                          Math.sin(deltaLng/2) * Math.sin(deltaLng/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+            
+            // Initial cluster creation
+            createHubAndSpokeClusters();
+            
+            // Recreate clusters on zoom
+            map.on('zoomend', createHubAndSpokeClusters);
 
             // Add active-point source and layer
             map.addSource('active-point', {
@@ -301,34 +427,6 @@ map.on('load', () => {
             // CLICK INTERACTIONS - Must be inside map.on('load')
             // ============================================================================
             
-            // Cluster expansion on click
-            map.on('click', 'clusters', (e) => {
-                if (!e.features || !e.features[0]) {
-                    console.log('No features in click event');
-                    return;
-                }
-                console.log('Cluster clicked:', e.features[0].properties.cluster_id);
-                const clusterId = e.features[0].properties.cluster_id;
-                const clusterCenter = e.lngLat;  // Store coordinates before async callback
-                const clusterSource = map.getSource('all-points');
-                if (!clusterSource) {
-                    console.error('all-points source not found');
-                    return;
-                }
-                clusterSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
-                    if (err) {
-                        console.error('Cluster expansion error:', err);
-                        return;
-                    }
-                    console.log('Cluster expansion zoom:', zoom);
-                    console.log('Flying to:', clusterCenter);
-                    map.flyTo({
-                        center: clusterCenter,
-                        zoom: zoom
-                    });
-                });
-            });
-
             // Show popup on unclustered point click
             map.on('click', 'unclustered-points', (e) => {
                 console.log('Point clicked:', e.features[0].properties.site);
