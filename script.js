@@ -236,12 +236,13 @@ map.on('load', () => {
                 }
             });
 
-            // Move spoke-lines layer to top (above points) for proper visibility
+            // Move spoke-lines layer to be BEFORE unclustered-points (underneath)
             // Find and move the layer
             const layers = map.getStyle().layers;
             const spokeLayerIndex = layers.findIndex(l => l.id === 'spoke-lines');
             if (spokeLayerIndex !== -1) {
-                map.moveLayer('spoke-lines', 'cluster-centers');
+                // Move spoke-lines to be right before unclustered-points so it draws underneath
+                map.moveLayer('spoke-lines', 'unclustered-points');
             }
             
             // Create a modified features source for display with spoke positioning
