@@ -190,14 +190,14 @@ map.on('load', () => {
                 }
             });
 
-            // Add spoke lines layer BEFORE unclustered-points so lines draw underneath
+            // Add spoke lines layer (will be repositioned after points layer)
             map.addLayer({
                 id: 'spoke-lines',
                 type: 'line',
                 source: 'spoke-lines',
                 paint: {
                     'line-color': '#333333',
-                    'line-width': 1,
+                    'line-width': 1.5,
                     'line-opacity': 0.6
                 }
             });
@@ -235,6 +235,14 @@ map.on('load', () => {
                     'circle-opacity': 0  // Hide the center circles
                 }
             });
+
+            // Move spoke-lines layer to top (above points) for proper visibility
+            // Find and move the layer
+            const layers = map.getStyle().layers;
+            const spokeLayerIndex = layers.findIndex(l => l.id === 'spoke-lines');
+            if (spokeLayerIndex !== -1) {
+                map.moveLayer('spoke-lines', 'cluster-centers');
+            }
             
             // Create a modified features source for display with spoke positioning
             let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
@@ -258,7 +266,7 @@ map.on('load', () => {
             // HUB AND SPOKE CLUSTERING
             // ============================================================================
             function createHubAndSpokeClusters() {
-                const spokeRadius = 100; // pixels
+                const spokeRadius = 50; // pixels (50px spoke length)
                 const clusterDistance = 80000; // meters (80km) - points within this distance are clustered
                 
                 // Reset spoke features
