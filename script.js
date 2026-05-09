@@ -276,20 +276,25 @@ map.on('load', () => {
                 
                 if (zoomLevel >= 7) {
                     spokeRadius = 50;
-                    clusterDistance = 15000; // 15km at zoom 7+
+                    clusterDistance = 10000; // 10km at zoom 7+
                 }
                 if (zoomLevel >= 8) {
                     spokeRadius = 30;
-                    clusterDistance = 8000; // 8km at zoom 8+
+                    clusterDistance = 5000; // 5km at zoom 8+
                 }
                 if (zoomLevel >= 9) {
                     spokeRadius = 15;
-                    clusterDistance = 3000; // 3km at zoom 9+
+                    clusterDistance = 2000; // 2km at zoom 9+
                 }
                 if (zoomLevel >= 10) {
                     // Minimal clustering - points almost independent
                     spokeRadius = 5;
                     clusterDistance = 500; // 500m at zoom 10+
+                }
+                if (zoomLevel >= 11) {
+                    // No clustering - each point is independent
+                    spokeRadius = 0;
+                    clusterDistance = 100; // 100m at zoom 11+ (essentially no clustering)
                 }
                 
                 // Reset spoke features
