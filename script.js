@@ -202,7 +202,31 @@ map.on('load', () => {
                 }
             });
 
-            // Add cluster center points layer
+            // Create a modified features source for display with spoke positioning
+            let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
+            
+            // Add all points layer with category colors FIRST (before cluster-centers)
+            map.addLayer({
+                id: 'unclustered-points',
+                type: 'circle',
+                source: 'all-points',
+                paint: {
+                    'circle-color': [
+                        'match',
+                        ['get', 'category'],
+                        'Critical Minerals Mine', '#7AC3C1',
+                        'Mining Infrastructure', '#388DFF',
+                        'Refining and Manufacturing', '#8CFFA7',
+                        'Canadian-Domiciled Companies', '#333333',
+                        '#999999'
+                    ],
+                    'circle-radius': 8,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#333333'
+                }
+            });
+
+            // Add cluster center points layer AFTER unclustered-points
             map.addLayer({
                 id: 'cluster-centers',
                 type: 'circle',
@@ -214,9 +238,6 @@ map.on('load', () => {
                     'circle-stroke-color': '#333333'
                 }
             });
-
-            // Create a modified features source for display with spoke positioning
-            let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
             
             // Helper function to calculate distance between two points (in meters)
             function getDistance(coords1, coords2) {
@@ -349,27 +370,6 @@ map.on('load', () => {
                 
                 console.log('Hub and spoke clusters updated:', clusters.length, 'clusters, spokes:', spokeLineFeatures.length);
             }
-            
-            // Add all points layer with category colors (NO CLUSTERING FILTER)
-            map.addLayer({
-                id: 'unclustered-points',
-                type: 'circle',
-                source: 'all-points',
-                paint: {
-                    'circle-color': [
-                        'match',
-                        ['get', 'category'],
-                        'Critical Minerals Mine', '#7AC3C1',
-                        'Mining Infrastructure', '#388DFF',
-                        'Refining and Manufacturing', '#8CFFA7',
-                        'Canadian-Domiciled Companies', '#333333',
-                        '#999999'
-                    ],
-                    'circle-radius': 8,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#333333'
-                }
-            });
             
             // Initial cluster creation
             createHubAndSpokeClusters();
