@@ -289,12 +289,12 @@ map.on('load', () => {
                 if (zoomLevel >= 10) {
                     // Minimal clustering - points almost independent
                     spokeRadius = 5;
-                    clusterDistance = 500; // 500m at zoom 10+
+                    clusterDistance = 200; // 200m at zoom 10+
                 }
                 if (zoomLevel >= 11) {
                     // No clustering - each point is independent
                     spokeRadius = 0;
-                    clusterDistance = 100; // 100m at zoom 11+ (essentially no clustering)
+                    clusterDistance = 50; // 50m at zoom 11+ (essentially no clustering)
                 }
                 
                 // Reset spoke features
