@@ -215,6 +215,121 @@ map.on('load', () => {
                 }
             });
 
+            // Create a modified features source for display with spoke positioning
+            let spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
+            
+            // Helper function to calculate distance between two points (in meters)
+            function getDistance(coords1, coords2) {
+                const R = 6371000; // Earth radius in meters
+                const lat1 = coords1[1] * Math.PI / 180;
+                const lat2 = coords2[1] * Math.PI / 180;
+                const deltaLat = (coords2[1] - coords1[1]) * Math.PI / 180;
+                const deltaLng = (coords2[0] - coords1[0]) * Math.PI / 180;
+                
+                const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                          Math.cos(lat1) * Math.cos(lat2) *
+                          Math.sin(deltaLng/2) * Math.sin(deltaLng/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+
+            // ============================================================================
+            // HUB AND SPOKE CLUSTERING
+            // ============================================================================
+            function createHubAndSpokeClusters() {
+                const spokeRadius = 100; // pixels
+                const clusterDistance = 80; // meters - points within this distance are clustered
+                
+                // Reset spoke features
+                spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
+                
+                // Create spatial index for clustering
+                const clustered = {};
+                const spokeLineFeatures = [];
+                const clusterCenterFeatures = [];
+                const processedFeatures = new Set();
+                
+                spokeFeatures.forEach((feature, index) => {
+                    if (processedFeatures.has(index)) return;
+                    
+                    const coords = feature.geometry.coordinates;
+                    const cluster = {
+                        center: coords,
+                        points: [{ feature, index }]
+                    };
+                    processedFeatures.add(index);
+                    
+                    // Find all points near this cluster center
+                    spokeFeatures.forEach((otherFeature, otherIndex) => {
+                        if (processedFeatures.has(otherIndex)) return;
+                        const distance = getDistance(coords, otherFeature.geometry.coordinates);
+                        if (distance < clusterDistance) {
+                            cluster.points.push({ feature: otherFeature, index: otherIndex });
+                            processedFeatures.add(otherIndex);
+                        }
+                    });
+                    
+                    // Add cluster center point
+                    clusterCenterFeatures.push({
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: coords
+                        }
+                    });
+                    
+                    // Generate spokes for multi-point clusters
+                    if (cluster.points.length > 1) {
+                        cluster.points.forEach((item, spokeIndex) => {
+                            const angle = (spokeIndex / cluster.points.length) * Math.PI * 2;
+                            const spokeCoordPixels = {
+                                x: Math.cos(angle) * spokeRadius,
+                                y: Math.sin(angle) * spokeRadius
+                            };
+                            
+                            // Convert pixel offset to lat/lng offset
+                            const centerPixel = map.project(coords);
+                            const spokeLngLat = map.unproject({
+                                x: centerPixel.x + spokeCoordPixels.x,
+                                y: centerPixel.y + spokeCoordPixels.y
+                            });
+                            
+                            // Update feature geometry with spoke position
+                            item.feature.geometry.coordinates = [spokeLngLat.lng, spokeLngLat.lat];
+                            item.feature.properties.cluster_center_lng = coords[0];
+                            item.feature.properties.cluster_center_lat = coords[1];
+                            
+                            // Add spoke line
+                            spokeLineFeatures.push({
+                                type: 'Feature',
+                                geometry: {
+                                    type: 'LineString',
+                                    coordinates: [coords, [spokeLngLat.lng, spokeLngLat.lat]]
+                                }
+                            });
+                        });
+                    }
+                });
+                
+                // Update all sources
+                map.getSource('all-points').setData({
+                    type: 'FeatureCollection',
+                    features: spokeFeatures
+                });
+                
+                map.getSource('spoke-lines').setData({
+                    type: 'FeatureCollection',
+                    features: spokeLineFeatures
+                });
+                
+                map.getSource('cluster-centers').setData({
+                    type: 'FeatureCollection',
+                    features: clusterCenterFeatures
+                });
+                
+                console.log('Hub and spoke clusters created:', Object.keys(clustered).length, 'clusters');
+            }
+            
             // Add all points layer with category colors (NO CLUSTERING FILTER)
             map.addLayer({
                 id: 'unclustered-points',
@@ -235,124 +350,6 @@ map.on('load', () => {
                     'circle-stroke-color': '#333333'
                 }
             });
-
-            // ============================================================================
-            // HUB AND SPOKE CLUSTERING
-            // ============================================================================
-            function createHubAndSpokeClusters() {
-                const spokeRadius = 100; // pixels
-                const clusterDistance = 80; // meters - points within this distance are clustered
-                const zoomLevel = map.getZoom();
-                
-                // Create spatial index for clustering
-                const clustered = {};
-                const clusterCenters = [];
-                const spokeLineFeatures = [];
-                const clusterCenterFeatures = [];
-                
-                allFeatures.forEach((feature, index) => {
-                    const coords = feature.geometry.coordinates;
-                    let foundCluster = false;
-                    
-                    // Check if this point is near an existing cluster
-                    for (const clusterId in clustered) {
-                        const cluster = clustered[clusterId];
-                        const distance = getDistance(coords, cluster.center);
-                        if (distance < clusterDistance) {
-                            cluster.points.push(feature);
-                            foundCluster = true;
-                            break;
-                        }
-                    }
-                    
-                    // Create new cluster if no match found
-                    if (!foundCluster) {
-                        const clusterId = 'cluster_' + index;
-                        clustered[clusterId] = {
-                            center: coords,
-                            points: [feature]
-                        };
-                    }
-                });
-                
-                // Generate spoke positions
-                for (const clusterId in clustered) {
-                    const cluster = clustered[clusterId];
-                    const centerCoords = cluster.center;
-                    const pointCount = cluster.points.length;
-                    
-                    // Add cluster center point
-                    clusterCenterFeatures.push({
-                        type: 'Feature',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: centerCoords
-                        }
-                    });
-                    
-                    cluster.points.forEach((feature, index) => {
-                        if (pointCount === 1) {
-                            // Single point - no spoke needed, update source directly
-                            return;
-                        }
-                        
-                        // Calculate angle for spoke position
-                        const angle = (index / pointCount) * Math.PI * 2;
-                        const spokeCoordPixels = {
-                            x: Math.cos(angle) * spokeRadius,
-                            y: Math.sin(angle) * spokeRadius
-                        };
-                        
-                        // Convert pixel offset to lat/lng offset
-                        const centerPixel = map.project(centerCoords);
-                        const spokeLngLat = map.unproject({
-                            x: centerPixel.x + spokeCoordPixels.x,
-                            y: centerPixel.y + spokeCoordPixels.y
-                        });
-                        
-                        // Update feature with spoke coordinates
-                        feature.properties.spoke_lng = spokeLngLat.lng;
-                        feature.properties.spoke_lat = spokeLngLat.lat;
-                        feature.properties.cluster_center_lng = centerCoords[0];
-                        feature.properties.cluster_center_lat = centerCoords[1];
-                        
-                        // Add spoke line
-                        spokeLineFeatures.push({
-                            type: 'Feature',
-                            geometry: {
-                                type: 'LineString',
-                                coordinates: [centerCoords, [spokeLngLat.lng, spokeLngLat.lat]]
-                            }
-                        });
-                    });
-                }
-                
-                // Update sources with spoke lines and cluster centers
-                map.getSource('spoke-lines').setData({
-                    type: 'FeatureCollection',
-                    features: spokeLineFeatures
-                });
-                
-                map.getSource('cluster-centers').setData({
-                    type: 'FeatureCollection',
-                    features: clusterCenterFeatures
-                });
-            }
-            
-            // Helper function to calculate distance between two points (in meters)
-            function getDistance(coords1, coords2) {
-                const R = 6371000; // Earth radius in meters
-                const lat1 = coords1[1] * Math.PI / 180;
-                const lat2 = coords2[1] * Math.PI / 180;
-                const deltaLat = (coords2[1] - coords1[1]) * Math.PI / 180;
-                const deltaLng = (coords2[0] - coords1[0]) * Math.PI / 180;
-                
-                const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
-                          Math.cos(lat1) * Math.cos(lat2) *
-                          Math.sin(deltaLng/2) * Math.sin(deltaLng/2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                return R * c;
-            }
             
             // Initial cluster creation
             createHubAndSpokeClusters();
@@ -412,15 +409,6 @@ map.on('load', () => {
                     popup.remove();
                     popup = null;
                 }
-            });
-
-            // Hover on clusters
-            map.on('mouseenter', 'clusters', (e) => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-
-            map.on('mouseleave', 'clusters', () => {
-                map.getCanvas().style.cursor = '';
             });
 
             // ============================================================================
