@@ -238,16 +238,18 @@ map.on('load', () => {
             // ============================================================================
             function createHubAndSpokeClusters() {
                 const spokeRadius = 100; // pixels
-                const clusterDistance = 80; // meters - points within this distance are clustered
+                const clusterDistance = 80000; // meters (80km) - points within this distance are clustered
                 
                 // Reset spoke features
                 spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
                 
                 // Create spatial index for clustering
-                const clustered = {};
+                const clusters = [];
                 const spokeLineFeatures = [];
                 const clusterCenterFeatures = [];
                 const processedFeatures = new Set();
+                
+                console.log('Starting cluster creation with', spokeFeatures.length, 'features');
                 
                 spokeFeatures.forEach((feature, index) => {
                     if (processedFeatures.has(index)) return;
@@ -255,7 +257,7 @@ map.on('load', () => {
                     const coords = feature.geometry.coordinates;
                     const cluster = {
                         center: coords,
-                        points: [{ feature, index }]
+                        points: [{ feature: JSON.parse(JSON.stringify(feature)), index }]
                     };
                     processedFeatures.add(index);
                     
@@ -264,31 +266,41 @@ map.on('load', () => {
                         if (processedFeatures.has(otherIndex)) return;
                         const distance = getDistance(coords, otherFeature.geometry.coordinates);
                         if (distance < clusterDistance) {
-                            cluster.points.push({ feature: otherFeature, index: otherIndex });
+                            cluster.points.push({ feature: JSON.parse(JSON.stringify(otherFeature)), index: otherIndex });
                             processedFeatures.add(otherIndex);
                         }
                     });
+                    
+                    clusters.push(cluster);
+                });
+                
+                console.log('Found', clusters.length, 'clusters');
+                
+                // Generate spokes for each cluster
+                clusters.forEach((cluster) => {
+                    const centerCoords = cluster.center;
+                    const pointCount = cluster.points.length;
                     
                     // Add cluster center point
                     clusterCenterFeatures.push({
                         type: 'Feature',
                         geometry: {
                             type: 'Point',
-                            coordinates: coords
+                            coordinates: centerCoords
                         }
                     });
                     
                     // Generate spokes for multi-point clusters
-                    if (cluster.points.length > 1) {
+                    if (pointCount > 1) {
                         cluster.points.forEach((item, spokeIndex) => {
-                            const angle = (spokeIndex / cluster.points.length) * Math.PI * 2;
+                            const angle = (spokeIndex / pointCount) * Math.PI * 2;
                             const spokeCoordPixels = {
                                 x: Math.cos(angle) * spokeRadius,
                                 y: Math.sin(angle) * spokeRadius
                             };
                             
                             // Convert pixel offset to lat/lng offset
-                            const centerPixel = map.project(coords);
+                            const centerPixel = map.project(centerCoords);
                             const spokeLngLat = map.unproject({
                                 x: centerPixel.x + spokeCoordPixels.x,
                                 y: centerPixel.y + spokeCoordPixels.y
@@ -296,19 +308,27 @@ map.on('load', () => {
                             
                             // Update feature geometry with spoke position
                             item.feature.geometry.coordinates = [spokeLngLat.lng, spokeLngLat.lat];
-                            item.feature.properties.cluster_center_lng = coords[0];
-                            item.feature.properties.cluster_center_lat = coords[1];
+                            item.feature.properties.cluster_center_lng = centerCoords[0];
+                            item.feature.properties.cluster_center_lat = centerCoords[1];
                             
                             // Add spoke line
                             spokeLineFeatures.push({
                                 type: 'Feature',
                                 geometry: {
                                     type: 'LineString',
-                                    coordinates: [coords, [spokeLngLat.lng, spokeLngLat.lat]]
+                                    coordinates: [centerCoords, [spokeLngLat.lng, spokeLngLat.lat]]
                                 }
                             });
                         });
                     }
+                });
+                
+                // Rebuild spokeFeatures array from all cluster points
+                spokeFeatures = [];
+                clusters.forEach(cluster => {
+                    cluster.points.forEach(item => {
+                        spokeFeatures.push(item.feature);
+                    });
                 });
                 
                 // Update all sources
@@ -327,7 +347,7 @@ map.on('load', () => {
                     features: clusterCenterFeatures
                 });
                 
-                console.log('Hub and spoke clusters created:', Object.keys(clustered).length, 'clusters');
+                console.log('Hub and spoke clusters updated:', clusters.length, 'clusters, spokes:', spokeLineFeatures.length);
             }
             
             // Add all points layer with category colors (NO CLUSTERING FILTER)
