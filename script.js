@@ -371,6 +371,9 @@ map.on('load', () => {
                                 }
                             });
                         });
+                    } else {
+                        // Single point cluster - keep point at original location
+                        cluster.points[0].feature.geometry.coordinates = centerCoords;
                     }
                 });
                 
