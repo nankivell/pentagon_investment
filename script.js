@@ -266,8 +266,35 @@ map.on('load', () => {
             // HUB AND SPOKE CLUSTERING
             // ============================================================================
             function createHubAndSpokeClusters() {
-                const spokeRadius = 50; // pixels (50px spoke length)
-                const clusterDistance = 80000; // meters (80km) - points within this distance are clustered
+                const zoomLevel = map.getZoom();
+                
+                // Adjust spoke radius and cluster distance based on zoom level
+                // Higher zoom = smaller spokes, tighter clustering (points spread out more)
+                let spokeRadius = 50;
+                let clusterDistance = 80000; // meters
+                
+                if (zoomLevel >= 5) {
+                    spokeRadius = 30;
+                    clusterDistance = 50000; // 50km at zoom 5+
+                }
+                if (zoomLevel >= 6) {
+                    spokeRadius = 20;
+                    clusterDistance = 30000; // 30km at zoom 6+
+                }
+                if (zoomLevel >= 7) {
+                    spokeRadius = 10;
+                    clusterDistance = 15000; // 15km at zoom 7+
+                }
+                if (zoomLevel >= 8) {
+                    // Points barely cluster at this zoom
+                    spokeRadius = 5;
+                    clusterDistance = 5000; // 5km at zoom 8+
+                }
+                if (zoomLevel >= 9) {
+                    // Minimal clustering - points almost independent
+                    spokeRadius = 0;
+                    clusterDistance = 1000; // 1km at zoom 9+
+                }
                 
                 // Reset spoke features
                 spokeFeatures = JSON.parse(JSON.stringify(allFeatures));
