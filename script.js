@@ -269,31 +269,26 @@ map.on('load', () => {
                 const zoomLevel = map.getZoom();
                 
                 // Adjust spoke radius and cluster distance based on zoom level
-                // Higher zoom = smaller spokes, tighter clustering (points spread out more)
+                // At zoom 7+, points start unclustering
                 let spokeRadius = 50;
                 let clusterDistance = 80000; // meters
                 
-                if (zoomLevel >= 5) {
-                    spokeRadius = 30;
-                    clusterDistance = 50000; // 50km at zoom 5+
-                }
-                if (zoomLevel >= 6) {
-                    spokeRadius = 20;
-                    clusterDistance = 30000; // 30km at zoom 6+
-                }
                 if (zoomLevel >= 7) {
-                    spokeRadius = 10;
-                    clusterDistance = 15000; // 15km at zoom 7+
+                    spokeRadius = 50;
+                    clusterDistance = 20000; // 20km at zoom 7+
                 }
                 if (zoomLevel >= 8) {
-                    // Points barely cluster at this zoom
-                    spokeRadius = 5;
-                    clusterDistance = 5000; // 5km at zoom 8+
+                    spokeRadius = 30;
+                    clusterDistance = 10000; // 10km at zoom 8+
                 }
                 if (zoomLevel >= 9) {
+                    spokeRadius = 15;
+                    clusterDistance = 5000; // 5km at zoom 9+
+                }
+                if (zoomLevel >= 10) {
                     // Minimal clustering - points almost independent
-                    spokeRadius = 0;
-                    clusterDistance = 1000; // 1km at zoom 9+
+                    spokeRadius = 5;
+                    clusterDistance = 1000; // 1km at zoom 10+
                 }
                 
                 // Reset spoke features
@@ -409,8 +404,8 @@ map.on('load', () => {
             // Initial cluster creation
             createHubAndSpokeClusters();
             
-            // Recreate clusters on zoom
-            map.on('zoomend', createHubAndSpokeClusters);
+            // Recreate clusters on every zoom change (not just when zoom ends)
+            map.on('zoom', createHubAndSpokeClusters);
 
             // Add active-point source and layer
             map.addSource('active-point', {
