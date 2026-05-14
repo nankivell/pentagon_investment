@@ -66,6 +66,7 @@ let allFeatures = [];
 // ============================================================================
 function createLegend() {
     const legend = document.getElementById('legend');
+    legend.style.width = '100%';
     layers.forEach(layer => {
         const legendItem = document.createElement('div');
         legendItem.className = 'legend-item';

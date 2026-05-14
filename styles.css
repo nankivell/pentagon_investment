@@ -51,6 +51,7 @@ body {
     max-height: 90%;
     background-color: #f9f9f9;
     width: 30%;
+    box-sizing: border-box;
     font-size: 14px;
     overflow: scroll;
     overflow-x: hidden;
@@ -124,6 +125,8 @@ body {
 }
 
 #legend {
+    width: 100%;
+    box-sizing: border-box;
     margin-top: 14px;
     font-size: 14px;
     padding-top: 14px;
@@ -135,11 +138,13 @@ body {
 .legend-item {
     display: flex;
     align-items: center;
+    width: 100%;
     margin-bottom: 4px;
 }
 
 .legend-color {
     display: inline-block;
+    flex: 0 0 12px;
     margin-right: 8px;
     border-radius: 50%;
     border: 1px solid #333333;
