@@ -182,7 +182,6 @@ body {
 
 @media only screen and (max-width: 768px) {
     #map-sec {
-        position: relative;
         height: 100vh;
         overflow: hidden;
     }
@@ -194,7 +193,7 @@ body {
 
     .is-map {
         height: 100vh;
-        position: relative;
+        position: static;
         display: block;
     }
 
