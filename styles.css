@@ -225,6 +225,11 @@ body {
         z-index: 999;
         max-height: 25vh;
         overflow-y: auto;
+        pointer-events: none;
+    }
+
+    #legend-card > * {
+        pointer-events: auto;
     }
 
     #sidebar {
