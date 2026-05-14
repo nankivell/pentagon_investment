@@ -181,6 +181,12 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
+    #map-sec {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+    }
+
     body {
         height: 100vh;
         overflow: hidden;
@@ -216,7 +222,7 @@ body {
         padding: 16px;
         background-color: #f9f9f9;
         box-sizing: border-box;
-        z-index: 200;
+        z-index: 999;
         max-height: 25vh;
         overflow-y: auto;
     }
@@ -235,7 +241,7 @@ body {
         background-color: #f9f9f9;
         box-sizing: border-box;
         overflow-y: auto;
-        z-index: 150;
+        z-index: 100;
         display: none;
     }
 
