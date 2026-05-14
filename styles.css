@@ -182,23 +182,39 @@ body {
 
 @media only screen and (max-width: 768px) {
     body {
-        display: flex;
-        flex-direction: column;
         height: 100vh;
         overflow: hidden;
     }
 
-    #legend-card {
+    .is-map {
+        height: 100vh;
         position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #map {
+        position: relative;
+        width: 100%;
+        flex: 1;
+        height: auto;
+    }
+
+    #legend-card {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         margin: 0;
         border-radius: 0;
-        box-shadow: none;
+        box-shadow: 0px 2px 12px rgba(51, 51, 51, 0.2);
         padding: 16px;
         background-color: #f9f9f9;
-        order: 1;
-        flex-shrink: 0;
-        max-height: auto;
+        box-sizing: border-box;
+        z-index: 50;
+        max-height: 25vh;
+        overflow-y: auto;
     }
 
     #sidebar {
@@ -213,32 +229,14 @@ body {
         box-shadow: 0px -2px 12px rgba(51, 51, 51, 0.2);
         padding: 16px;
         background-color: #f9f9f9;
-        overflow: visible;
+        box-sizing: border-box;
         overflow-y: auto;
-        order: 3;
-        flex-shrink: 0;
-        display: none;
         z-index: 100;
+        display: none;
     }
 
     #sidebar.active {
         display: block;
-    }
-
-    #map {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        margin-top: 0;
-        order: 2;
-        flex: 1;
-    }
-
-    .is-map {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
     }
 
     /* Hide info-wrapper by default on mobile */
