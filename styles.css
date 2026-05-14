@@ -198,6 +198,10 @@ body {
         width: 100%;
         flex: 1;
         height: auto;
+        margin-top: 0;
+        padding-top: 25vh;
+        padding-bottom: 40vh;
+        box-sizing: border-box;
     }
 
     #legend-card {
@@ -212,7 +216,7 @@ body {
         padding: 16px;
         background-color: #f9f9f9;
         box-sizing: border-box;
-        z-index: 50;
+        z-index: 200;
         max-height: 25vh;
         overflow-y: auto;
     }
@@ -231,7 +235,7 @@ body {
         background-color: #f9f9f9;
         box-sizing: border-box;
         overflow-y: auto;
-        z-index: 100;
+        z-index: 150;
         display: none;
     }
 
