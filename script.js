@@ -511,7 +511,11 @@ map.on('load', () => {
                 });
                 
                 if (returnBtn) returnBtn.style.display = 'block';
-                if (infoWrapper) infoWrapper.style.display = 'block';
+                if (infoWrapper) {
+                    // On mobile, info-wrapper is positioned fixed at bottom, so it will be visible
+                    // On desktop, it's within the sidebar and needs to be displayed
+                    infoWrapper.style.display = 'block';
+                }
                 if (heading) heading.textContent = feature.properties.site;
                 if (loc) loc.textContent = feature.properties.location;
                 if (employees) employees.innerHTML = `<strong>Minerals:</strong> ${feature.properties.minerals}`;
