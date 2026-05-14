@@ -205,7 +205,7 @@ body {
         flex: 1;
         height: auto;
         margin-top: 0;
-        padding-top: 25vh;
+        padding-top: 0;
         padding-bottom: 40vh;
         box-sizing: border-box;
     }
@@ -225,10 +225,6 @@ body {
         z-index: 999;
         max-height: 25vh;
         overflow-y: auto;
-        pointer-events: none;
-    }
-
-    #legend-card > * {
         pointer-events: auto;
     }
 
