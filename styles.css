@@ -181,20 +181,30 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
+    html {
+        height: 100vh;
+        overflow: hidden;
+    }
+
     #map-sec {
         height: 100vh;
         overflow: hidden;
+        position: static;
     }
 
     body {
         height: 100vh;
         overflow: hidden;
+        margin: 0;
+        padding: 0;
     }
 
     .is-map {
         height: 100vh;
         position: static;
         display: block;
+        margin: 0;
+        padding: 0;
     }
 
     #map {
@@ -220,16 +230,17 @@ body {
         padding: 16px;
         background-color: #f9f9f9;
         box-sizing: border-box;
-        z-index: 100;
+        z-index: 1000;
         max-height: 25vh;
         overflow-y: auto;
     }
 
     #sidebar {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
         width: 100%;
         max-height: 40vh;
         margin: 0;
@@ -239,7 +250,7 @@ body {
         background-color: #f9f9f9;
         box-sizing: border-box;
         overflow-y: auto;
-        z-index: 200;
+        z-index: 999;
         display: none;
     }
 
