@@ -512,9 +512,12 @@ map.on('load', () => {
                 
                 if (returnBtn) returnBtn.style.display = 'block';
                 if (infoWrapper) {
-                    // On mobile, info-wrapper is positioned fixed at bottom, so it will be visible
-                    // On desktop, it's within the sidebar and needs to be displayed
                     infoWrapper.style.display = 'block';
+                }
+                // Add active class to sidebar on mobile to show it at bottom
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.add('active');
                 }
                 if (heading) heading.textContent = feature.properties.site;
                 if (loc) loc.textContent = feature.properties.location;
@@ -546,6 +549,11 @@ document.getElementById('return-button').addEventListener('click', function() {
     
     document.getElementById('return-button').style.display = 'none';
     document.getElementById('info-wrapper').style.display = 'none';
+    // Remove active class to hide sidebar on mobile
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+    }
 });
 
 // Adjust sidebar width on window resize
