@@ -195,18 +195,17 @@ body {
     .is-map {
         height: 100vh;
         position: relative;
-        display: flex;
-        flex-direction: column;
+        display: block;
     }
 
     #map {
-        position: relative;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        flex: 1;
-        height: auto;
-        margin-top: 0;
-        padding-top: 0;
-        padding-bottom: 40vh;
+        height: 100%;
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
     }
 
@@ -225,7 +224,6 @@ body {
         z-index: 999;
         max-height: 25vh;
         overflow-y: auto;
-        pointer-events: auto;
     }
 
     #sidebar {
