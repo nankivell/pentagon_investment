@@ -132,9 +132,12 @@ body {
 }
 
 #civprod {
+    display: block !important;
     border-bottom: none;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
+    grid-template-columns: none;
+    grid-gap: 0;
 }
 
 #ownership {

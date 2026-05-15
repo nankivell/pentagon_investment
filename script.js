@@ -527,13 +527,14 @@ map.on('load', () => {
                 }
                 if (heading) heading.textContent = feature.properties.site;
                 if (loc) loc.textContent = feature.properties.location;
-                if (employees) employees.innerHTML = `<strong>Minerals:</strong> ${feature.properties.minerals}`;
-                if (militaryprod) militaryprod.innerHTML = `<strong>Funding:</strong> ${feature.properties.funding}`;
+                // Only show description, hide other fields
+                if (employees) employees.innerHTML = '';
+                if (militaryprod) militaryprod.innerHTML = '';
                 if (civprod) {
-                    civprod.innerHTML = `<strong>Description:</strong> ${feature.properties.description}`;
+                    civprod.innerHTML = feature.properties.description;
                     civprod.style.display = 'block';
                 }
-                if (text) text.innerHTML = feature.properties.text || '';
+                if (text) text.innerHTML = '';
             });
         })
         .catch(error => {
