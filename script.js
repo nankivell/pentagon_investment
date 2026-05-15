@@ -546,24 +546,6 @@ map.on('load', () => {
 // Global popup variable for hover interactions
 let popup = null;
 
-// ============================================================================
-// RETURN BUTTON
-// ============================================================================
-document.getElementById('return-button').addEventListener('click', function() {
-    map.flyTo({
-        center: [-95, 56],
-        zoom: 3
-    });
-    
-    document.getElementById('return-button').style.display = 'none';
-    document.getElementById('info-wrapper').style.display = 'none';
-    // Remove active class to hide sidebar on mobile
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.remove('active');
-    }
-});
-
 // Close button handler
 document.getElementById('close-button').addEventListener('click', function() {
     // Fly back to default map position (same as page load)

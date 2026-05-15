@@ -150,10 +150,6 @@ body {
     display: none !important;
 }
 
-#return-button {
-    display: none !important;
-}
-
 #intro {
     position: absolute;
     top: 0;
@@ -165,17 +161,6 @@ body {
     color: #333;
     box-shadow: 0px 2px 12px rgba(51, 51, 51, 0.2);
     max-width: 25%;
-}
-
-#return-button {
-    color: #777;
-    font-size: 12px;
-    display: none;
-    margin-top: 16px;
-}
-
-#sidebar.active #return-button {
-    display: block !important;
 }
 
 #close-button {
@@ -195,11 +180,6 @@ body {
 
 #sidebar.active #close-button {
     display: block !important;
-}
-
-#return-button:hover {
-    color: #9CA4FC;
-    cursor: pointer;
 }
 
 #legend {
