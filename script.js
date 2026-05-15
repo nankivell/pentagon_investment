@@ -489,6 +489,13 @@ map.on('load', () => {
                 console.log('Point clicked:', e.features[0].properties.site);
                 const feature = e.features[0];
                 
+                // Fly to the clicked point, keeping current zoom level
+                const coords = feature.geometry.coordinates;
+                map.flyTo({
+                    center: coords,
+                    zoom: map.getZoom()
+                });
+                
                 // Show detailed info in sidebar - check if elements exist
                 const returnBtn = document.getElementById('return-button');
                 const infoWrapper = document.getElementById('info-wrapper');
