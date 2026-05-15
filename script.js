@@ -565,6 +565,12 @@ document.getElementById('return-button').addEventListener('click', function() {
 
 // Close button handler
 document.getElementById('close-button').addEventListener('click', function() {
+    // Fly back to default map position
+    map.flyTo({
+        center: [-95, 56],
+        zoom: 4
+    });
+    
     // Remove active class to hide sidebar
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
