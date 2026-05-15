@@ -528,7 +528,7 @@ map.on('load', () => {
                 if (heading) heading.textContent = feature.properties.site;
                 if (loc) loc.textContent = feature.properties.location;
                 if (employees) employees.innerHTML = `<strong>Minerals:</strong> ${feature.properties.minerals}`;
-                if (militaryprod) militaryprod.innerHTML = `<strong>Funding:</strong> ${feature.properties.funding}`;
+                if (militaryprod) militaryprod.innerHTML = `<strong>Pentagon Funding:</strong> ${feature.properties.funding}`;
                 if (civprod) {
                     civprod.innerHTML = feature.properties.description;
                     civprod.style.display = 'block';
