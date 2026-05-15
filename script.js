@@ -37,11 +37,15 @@ const layers = [
 // Initialize map
 let map;
 try {
+    // Determine zoom level based on screen size
+    const isMobile = window.innerWidth <= 768;
+    const zoomLevel = isMobile ? 2 : 3;
+    
     map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: [-95, 56],  // Centered on Canada
-        zoom: 3,  // Zoomed out
+        zoom: zoomLevel,  // Zoom 2 for mobile, 3 for desktop
         attributionControl: false  // Disable default attribution since we have custom one
     });
     console.log('Map initialized successfully');
