@@ -517,7 +517,6 @@ map.on('load', () => {
                     text: !!text
                 });
                 
-                if (returnBtn) returnBtn.style.display = 'block';
                 if (infoWrapper) {
                     infoWrapper.style.display = 'block';
                 }
