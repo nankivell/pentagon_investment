@@ -123,6 +123,14 @@ body {
     padding-bottom: 8px;
 }
 
+#employees {
+    display: none !important;
+}
+
+#militaryprod {
+    display: none !important;
+}
+
 #civprod {
     border-bottom: none;
     margin-bottom: 0 !important;
