@@ -527,9 +527,10 @@ map.on('load', () => {
                 }
                 if (heading) heading.textContent = feature.properties.site;
                 if (loc) loc.textContent = feature.properties.location;
-                // Only show description, hide other fields
-                if (employees) employees.innerHTML = '';
-                if (militaryprod) militaryprod.innerHTML = '';
+                const ownershipEl = document.getElementById('ownership');
+                if (ownershipEl) ownershipEl.innerHTML = `<strong>Proponent:</strong> ${feature.properties.location}`;
+                if (employees) employees.innerHTML = `<strong>Minerals:</strong> ${feature.properties.minerals}`;
+                if (militaryprod) militaryprod.innerHTML = `<strong>Funding:</strong> ${feature.properties.funding}`;
                 if (civprod) {
                     civprod.innerHTML = feature.properties.description;
                     civprod.style.display = 'block';

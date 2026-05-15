@@ -124,11 +124,11 @@ body {
 }
 
 #employees {
-    display: none !important;
+    display: grid !important;
 }
 
 #militaryprod {
-    display: none !important;
+    display: grid !important;
 }
 
 #civprod {
@@ -143,7 +143,7 @@ body {
 #ownership {
     border-bottom: none;
     margin-top: 0 !important;
-    display: none !important;
+    display: grid !important;
 }
 
 #greenprod {
