@@ -279,7 +279,7 @@ body {
 
     #sidebar {
         position: fixed;
-        bottom: 60px !important;
+        bottom: 16px !important;
         left: 16px !important;
         right: 16px !important;
         top: auto !important;
