@@ -94,10 +94,9 @@ body {
 
 #info-wrapper {
     display: none;
-    margin-top: 12px;
+    margin-top: 0;
     font-size: 14px;
-    padding-top: 12px;
-    border-top: 1px solid #BEBEBE;
+    padding-top: 0;
     font-size: 12px;
 }
 
