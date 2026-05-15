@@ -118,9 +118,13 @@ body {
     display: grid;
     grid-template-columns: 9rem 1fr;
     grid-gap: 10px;
-    margin-bottom: 0.4rem;
+    margin-bottom: 8px;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 0.4rem;
+    padding-bottom: 8px;
+}
+
+#civprod {
+    border-bottom: none;
 }
 
 #ownership {
