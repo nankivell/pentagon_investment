@@ -556,6 +556,15 @@ document.getElementById('return-button').addEventListener('click', function() {
     }
 });
 
+// Close button handler
+document.getElementById('close-button').addEventListener('click', function() {
+    // Remove active class to hide sidebar
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+    }
+});
+
 // Adjust sidebar width on window resize
 window.addEventListener('resize', () => {
     if (window.innerWidth < 768) {

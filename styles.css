@@ -152,6 +152,25 @@ body {
     display: block !important;
 }
 
+#close-button {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 28px;
+    line-height: 1;
+    color: #777;
+    cursor: pointer;
+    display: none;
+}
+
+#close-button:hover {
+    color: #9CA4FC;
+}
+
+#sidebar.active #close-button {
+    display: block !important;
+}
+
 #return-button:hover {
     color: #9CA4FC;
     cursor: pointer;
