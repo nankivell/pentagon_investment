@@ -84,7 +84,7 @@ body {
 }
 
 #sidebar.active {
-    display: block;
+    display: block !important;
 }
 
 #info-wrapper {
@@ -262,7 +262,7 @@ body {
     }
 
     #sidebar.active {
-        display: block;
+        display: block !important;
     }
 
     /* Hide info-wrapper by default on mobile */
