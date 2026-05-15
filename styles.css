@@ -132,6 +132,15 @@ body {
 #ownership {
     border-bottom: none;
     margin-top: 0 !important;
+    display: none;
+}
+
+#greenprod {
+    display: none;
+}
+
+#return-button {
+    display: none !important;
 }
 
 #intro {
