@@ -550,7 +550,7 @@ let popup = null;
 document.getElementById('return-button').addEventListener('click', function() {
     map.flyTo({
         center: [-95, 56],
-        zoom: 4
+        zoom: 3
     });
     
     document.getElementById('return-button').style.display = 'none';
@@ -564,10 +564,10 @@ document.getElementById('return-button').addEventListener('click', function() {
 
 // Close button handler
 document.getElementById('close-button').addEventListener('click', function() {
-    // Fly back to default map position
+    // Fly back to default map position (same as page load)
     map.flyTo({
         center: [-95, 56],
-        zoom: 4
+        zoom: 3
     });
     
     // Remove active class to hide sidebar
