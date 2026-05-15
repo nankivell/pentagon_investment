@@ -51,6 +51,7 @@ body {
     max-height: 50%;
     background-color: #f9f9f9;
     width: 45%;
+    max-width: none;
     box-sizing: border-box;
     font-size: 14px;
     overflow: scroll;
