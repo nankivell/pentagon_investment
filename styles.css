@@ -131,6 +131,7 @@ body {
 
 #ownership {
     border-bottom: none;
+    margin-top: 0 !important;
 }
 
 #intro {
