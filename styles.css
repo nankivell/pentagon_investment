@@ -45,7 +45,7 @@ body {
 
 #sidebar {
     position: absolute;
-    top: 280px;
+    bottom: 16px;
     right: 0;
     height: auto;
     max-height: 50%;
