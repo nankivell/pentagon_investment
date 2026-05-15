@@ -87,6 +87,10 @@ body {
     display: block !important;
 }
 
+#sidebar.active #info-wrapper {
+    display: block !important;
+}
+
 #info-wrapper {
     display: none;
     margin-top: 12px;
@@ -141,6 +145,10 @@ body {
     font-size: 12px;
     display: none;
     margin-top: 16px;
+}
+
+#sidebar.active #return-button {
+    display: block !important;
 }
 
 #return-button:hover {
