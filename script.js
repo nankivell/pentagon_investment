@@ -102,7 +102,7 @@ class CustomAttribution {
         this.map = map;
         this.container = document.createElement('div');
         this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-attrib';
-        this.container.innerHTML = 'Map by Nessie Nankivell | Research also by Shiri Pasternak/<a href="https://8thfirerising.ca/" target="_blank">8th Fire Rising</a> | © <a href="https://www.mapbox.com/" target="_blank">Mapbox</a> © <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>';
+        this.container.innerHTML = 'Map by Nessie Nankivell | Data by Shiri Pasternak/<a href="https://8thfirerising.ca/" target="_blank">8th Fire Rising</a> | © <a href="https://www.mapbox.com/" target="_blank">Mapbox</a> © <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>';
         this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
         this.container.style.padding = '5px 8px';
         this.container.style.fontFamily = 'Arial, sans-serif';
